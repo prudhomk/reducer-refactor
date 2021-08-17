@@ -1,12 +1,15 @@
 /* eslint-disable max-len */
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
+import { ReduxProvider } from '../../state/ReduxProvider';
+import { initialState, Reducer } from '../../state/reducer';
+
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
 describe('App container', () => {
   it('renders the app and displays colors', async () => {
-    render(<App />);
+    render(<ReduxProvider reducer={Reducer} initialState={initialState}><App /></ReduxProvider>);
 
     const display = screen.getByTestId('display');
 

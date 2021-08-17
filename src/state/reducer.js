@@ -11,7 +11,6 @@ export function Reducer(state, action) {
   switch(action.type) {
 
     case UNDO:
-      console.log('string');
       return { 
         ...state, 
         before: (state.before).slice(0, -1),
