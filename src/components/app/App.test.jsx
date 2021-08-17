@@ -1,11 +1,28 @@
+/* eslint-disable max-len */
 import React from 'react';
-import { render, cleanup } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { ReduxProvider } from '../../state/ReduxProvider';
+import { initialState, Reducer } from '../../state/reducer';
+
+import userEvent from '@testing-library/user-event';
 import App from './App';
 
-describe('App component', () => {
-  afterEach(() => cleanup());
-  it('renders App', () => {
-    const { asFragment } = render(<App />);
-    expect(asFragment()).toMatchSnapshot();
+describe('App container', () => {
+  it('renders the app and displays colors', async () => {
+    render(<ReduxProvider reducer={Reducer} initialState={initialState}><App /></ReduxProvider>);
+
+    const display = screen.getByTestId('display');
+
+    const colorInput = screen.getByTestId('colorInput');
+    fireEvent.change(colorInput, { target: { value: '#FF0001' } });
+    expect(display).toHaveStyle({ backgroundColor: '#FF0001' });
+
+    const undoButton = screen.getByTestId('undo');
+    userEvent.click(undoButton);
+    expect(display).toHaveStyle({ backgroundColor: '#FF0000' });
+
+    const redoButton = screen.getByTestId('redo');
+    userEvent.click(redoButton);
+    expect(display).toHaveStyle({ backgroundColor: '#FF0001' });
   });
 });
