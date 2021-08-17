@@ -1,37 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from '../../state/ReduxProvider';
+import { currentColor, beforeColor, afterColor } from '../../state/actions';
+import { selectColor } from '../../state/selectors';
+import { useReducer } from 'react';
 
-const useRecord = (init) => {
-  const [before, setBefore] = useState([]);
-  const [current, setCurrent] = useState(init);
-  const [after, setAfter] = useState([]);
 
-  const undo = () => {
-    setAfter((after) => [current, ...after]);
-    setCurrent(before[before.length - 1]);
-    setBefore((before) => before.slice(0, -1));
-  };
+const [state, dispatch] = useReducer(reducer, initialState);
 
-  const redo = () => {
-    setBefore((before) => [...before, current]);
-    setCurrent(after[0]);
-    setAfter((after) => after.slice(1));
-  };
-
-  const record = (val) => {
-    setBefore((before) => [...before, current]);
-    setCurrent(val);
-  };
-
-  return {
-    undo,
-    record,
-    redo,
-    current,
-  };
+const initialState = {
+  current: '#FF0000',
+  before: [],
+  after: [],
 };
+  //   const undo = () => {
+  //     setAfter((after) => [current, ...after]);
+  //     setCurrent(before[before.length - 1]);
+  //     setBefore((before) => before.slice(0, -1));
+  //   };
+
+//   const redo = () => {
+//     setBefore((before) => [...before, current]);
+//     setCurrent(after[0]);
+//     setAfter((after) => after.slice(1));
+//   };
+
+//   const record = (val) => {
+//     setBefore((before) => [...before, current]);
+//     setCurrent(val);
+//   };
+
+//   return {
+//     undo,
+//     record,
+//     redo,
+//     current,
+//   };
+// };
+const color = useSelector(selectColor);
+
+useEffect(() => {
+  dispatch(currentColor(color));
+  dispatch(beforeColor(color));
+  dispatch(afterColor(color));
+});
+
 
 function App() {
-  const { current, undo, redo, record } = useRecord('#FF0000');
+  const { current, undo, redo, record } = useReducer('#FF0000');
 
   return (
     <>
