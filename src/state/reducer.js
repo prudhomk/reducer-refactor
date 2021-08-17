@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { AFTER_COLOR, BEFORE_COLOR, CURRENT_COLOR, redo, undo } from './actions';
+import { UNDO, REDO, CURRENT_COLOR } from './actions';
 
 export const initialState = {
   current: '#FF0000',
@@ -10,22 +10,31 @@ export const initialState = {
 export function Reducer(state, action) {
   switch(action.type) {
 
-    case undo:
+    case UNDO:
+      console.log('string');
       return { 
         ...state, 
-        before: (action.payload(BEFORE_COLOR)).slice(0, -1),
-        current: action.payload([BEFORE_COLOR.length - 1]),
-        after: action.payload([CURRENT_COLOR, ...AFTER_COLOR]), 
-      };    
-    case redo:
+        before: (state.before).slice(0, -1),
+        current: state.before[(state.before).length - 1],
+        after: [state.current, ...state.after], 
+      };   
+
+    case REDO:
       return { 
         ...state, 
-        before: action.payload([...BEFORE_COLOR, CURRENT_COLOR]),
-        current: action.payload(AFTER_COLOR[0]),
-        after: (action.payload(AFTER_COLOR)).slice(1),
+        before: [...state.before, state.current],
+        current: state.after[0],
+        after: (state.after).slice(1),
       };
    
     case CURRENT_COLOR:
+      return {
+        ...state,
+        before: [...state.before, state.current],
+        current: action.payload,
+      };
+
+    default:
       return state;
   }
 }

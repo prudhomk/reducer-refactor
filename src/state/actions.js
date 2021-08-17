@@ -1,20 +1,18 @@
 export const CURRENT_COLOR = 'CURRENT_COLOR';
-export const BEFORE_COLOR = 'BEFORE_COLOR';
-export const AFTER_COLOR = 'AFTER_COLOR';
+export const UNDO = 'UNDO';
+export const REDO = 'REDO';
 
-export const currentColor = (color) => ({
+export const currentColor = (current) => ({
   type: CURRENT_COLOR,
-  payload: color,
+  payload: current,
 });
 
-export const beforeColor = (color) => ({
-  type: BEFORE_COLOR,
-  payload: color,
+export const undoColor = () => ({
+  type: UNDO,
 });
 
-export const afterColor = (color) => ({
-  type: AFTER_COLOR,
-  payload: color,
+export const redoColor = () => ({
+  type: REDO,
 });
 
 
